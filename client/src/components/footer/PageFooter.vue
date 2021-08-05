@@ -4,7 +4,7 @@
       <div class="contents">
         <a href="https://github.com/ikmich/defapi" target="_blank">
           <!--suppress HtmlUnknownTarget -->
-          <img class="github-logo" src="/images/GitHub_Logo.png" alt="Github Logo"
+          <img class="github-logo" src="/img/GitHub_Logo.png" alt="Github Logo"
         /></a>
       </div>
     </div>

@@ -5,7 +5,9 @@
         <div class=''>
           Defapi Client
         </div>
-        <div class='text--version'>v.{{ this.clientVersion }}</div>
+        <div class='text--version'>
+          v.{{ this.clientVersion }}
+        </div>
       </div>
     </div>
     <div id='dashboardContent'>
@@ -24,7 +26,6 @@
                 </div>
               </div>
               <div class='title'>{{ item.source.label }}</div>
-              <!--            <div class='subtext'>Click to view api definitions for {{ item.source.label }}</div>-->
               <div class='text--baseUri'>{{ item.manifest.baseUri }}</div>
             </div>
           </router-link>
@@ -58,26 +59,30 @@ export default {
       clientVersion: getVersion()
     };
   },
-  computed: {
-    // baseUri() {
-    //   return process.env.VUE_APP_SERVER_BASE_URI ?? '';
-    // }
-  },
+  computed: {},
   methods: {
     async fetchSources() {
-      const raw = await fetch(`${getBaseUri()}/api/sources`);
-      this.sources = JSON.parse(await raw.text());
+      try {
+        const raw = await fetch(`${getBaseUri()}/api/sources`);
+        this.sources = JSON.parse(await raw.text());
 
-      if (isDev()) {
-        console.log('sources', this.sources);
+        if (isDev()) {
+          console.log('sources', this.sources);
+        }
+      } catch (e) {
+        console.error('Error fetching sources:', e);
       }
     },
     async fetchDashboardData() {
-      const raw = await fetch(`${getBaseUri()}/api/dashboard`);
-      this.dashboardData = JSON.parse(await raw.text());
+      try {
+        const raw = await fetch(`${getBaseUri()}/api/dashboard`);
+        this.dashboardData = JSON.parse(await raw.text());
 
-      if (isDev()) {
-        console.log('dashboardData', this.dashboardData);
+        if (isDev()) {
+          console.log('dashboardData', this.dashboardData);
+        }
+      } catch (e) {
+        console.error('Error fetching dashboard data:', e);
       }
     }
   },

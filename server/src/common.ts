@@ -3,7 +3,7 @@ import { FS, Path } from './deps';
 
 export const CLIENT_DIR = Path.join(__dirname, '../../client/dist');
 export const MANIFESTS_DIR = Path.join(CLIENT_DIR, 'manifests/');
-export const SOURCES_DIR = process.cwd();
+export const SOURCES_DIR = Path.join(__dirname, '../../');
 export const SOURCES_FILE = Path.join(SOURCES_DIR, 'defapi.sources.js');
 
 export function readSources(): DefapiSource[] {

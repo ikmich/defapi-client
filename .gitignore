@@ -5,6 +5,6 @@ lib
 dist
 build
 coverage
-.env
+server/.env
 .DS_Store
-client_dist.js
+watch-client.js

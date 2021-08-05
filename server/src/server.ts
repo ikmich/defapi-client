@@ -4,7 +4,6 @@ import { captureSources } from './capture-sources';
 import cors from 'cors';
 import { applyRoutes } from './routes';
 import { CLIENT_DIR } from './common';
-// import logSymbols from 'log-symbols';
 
 const app = express();
 app.use(cors());
@@ -26,7 +25,6 @@ app.listen(env.port, () => {
   captureSources().catch((err) => {
     console.error(err);
   });
-  // console.log(logSymbols.success, 'Success');
   console.log(`defapi-client is being served on port ${env.port}`);
 });
 

@@ -84,14 +84,6 @@
           <div class='search-results-info'>{{ numSearchResults }}</div>
           <EndpointList v-bind:endpoints='endpointsToDisplay' />
         </div>
-
-        <!-- <div id='footer'>
-                  <div class='contents'>
-                    <a href='https://github.com/ikmich/defapi' target='_blank'>
-                      <img class='github-logo' src='/images/GitHub_Logo.png' alt='Github Logo'
-                      /></a>
-                  </div>
-                </div>-->
         <div>
           <PageFooter />
         </div>
@@ -111,7 +103,7 @@ import IconTrayArrowDown from '../../icons/IconTrayArrowDown';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/default.css';
 import PageFooter from '../../footer/PageFooter';
-import { getBaseUri } from '../../../utils';
+// import { getBaseUri } from '../../../utils';
 
 export default {
   name: 'ApiPage',
@@ -217,7 +209,8 @@ export default {
     },
 
     async fetchRepo() {
-      let raw = await fetch(`${getBaseUri()}/api/manifests/${this.apiName}`);
+      let raw = await fetch(`/manifests/${this.apiName}`);
+      // let raw = await fetch(`${getBaseUri()}/api/manifests/${this.apiName}`);
       return JSON.parse(await raw.text());
     },
 

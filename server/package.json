@@ -1,0 +1,18 @@
+{
+  "name": "defapi-client-server-module",
+  "version": "1.0.0",
+  "description": "Server module for defapi client",
+  "main": "dist/server.js",
+  "type": "module",
+  "scripts": {
+    "server:build:dev": "NODE_ENV=development npm run server:build",
+    "server:build": "rm -rf ./dist && tsc",
+    "server:start:dev": "ts-node-dev ./src/server.ts",
+    "server:start": "ts-node ./src/server.ts",
+    "server:start:prod": "pm2-runtime ecosystem.config.js --env production",
+    "server:stop:prod": "pm2 stop ecosystem.config.js"
+  },
+  "keywords": [],
+  "author": "Ikenna Agbasimalo",
+  "license": "ISC"
+}
