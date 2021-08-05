@@ -12,7 +12,7 @@
   --codeBoxTitleColor: #a5cafd; /*a5cafd #b3d2af*/
 }
 
-#app {
+#api-defs {
   /*font-family: Avenir, Helvetica, Arial, sans-serif;*/
   font-family: 'Rubik', 'IBM Plex Sans', sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -107,7 +107,7 @@
   padding: 12px 64px;
 }
 
-#app #footer {
+#api-defs #footer {
   background-color: #f9f9f9;
   margin-top: 32px;
   padding: 24px;

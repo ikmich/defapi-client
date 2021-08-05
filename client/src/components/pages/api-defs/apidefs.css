@@ -1,20 +1,6 @@
-:root {
-  /*--textBlue: #06f;*/
-  --textBlue: #578ed6;
-  --pathBlue: #025fcd;
-  --textBlue2: #1d82f5;
-  --green1: #70b34f;
-  --getMethodColor: #addd96; /*#a5cafd*/
-  --postMethodColor: #ffb274;
-  --patchMethodColor: #fd71f6;
-  --putMethodColor: #bc71fd;
-  --deleteMethodColor: #fd2424;
-  --codeBoxTitleColor: #a5cafd; /*a5cafd #b3d2af*/
-}
 
-#app {
-  /*font-family: Avenir, Helvetica, Arial, sans-serif;*/
-  font-family: 'Rubik', 'IBM Plex Sans', sans-serif;
+#api-defs {
+  font-family: 'Rubik', 'Nunito', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -24,7 +10,7 @@
   position: relative;
 }
 
-.container {
+.page-container {
   margin: 0;
   padding: 0;
   text-align: left;
@@ -35,7 +21,7 @@
   position: relative;
 }
 
-#header {
+#apidefsHeader {
   display: flex;
   justify-content: center;
   background-color: #f6f6f6;
@@ -47,11 +33,11 @@
   z-index: 10000;
 }
 
-#header > .left {
+#apidefsHeader > .left {
   padding: 12px;
 }
 
-#header > .middle {
+#apidefsHeader > .middle {
   flex-grow: 1;
   display: flex;
   align-items: center;
@@ -59,7 +45,7 @@
   padding: 18px 0;
 }
 
-#header > .right {
+#apidefsHeader > .right {
   min-width: 220px;
   display: flex;
   align-items: center;
@@ -107,7 +93,7 @@
   padding: 12px 64px;
 }
 
-#app #footer {
+/*#api-defs #footer {
   background-color: #f9f9f9;
   margin-top: 32px;
   padding: 24px;
@@ -126,7 +112,7 @@
 
 #footer .github-logo:hover {
   opacity: 1;
-}
+}*/
 
 .endpoint-list-wrapper {
   display: flex;

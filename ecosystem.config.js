@@ -2,10 +2,10 @@ module.exports = {
   apps: [
     {
       name: 'defapi-client',
-      script: './server/dist/index.js',
+      script: './server/dist/server.js',
 
       // Options reference: https://pm2.io/doc/en/runtime/reference/ecosystem-file/
-      instances: 4,
+      instances: 'max',
       exec_mode: 'cluster',
       autorestart: true,
       watch: true,

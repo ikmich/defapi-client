@@ -1,6 +1,5 @@
 import { FS, Path } from './deps';
-import { MANIFESTS_DIR } from './index';
-
+import { MANIFESTS_DIR, readSources } from './common';
 const got = require('got');
 
 async function fetchDefapiManifest(key: string, url: string) {
@@ -9,6 +8,9 @@ async function fetchDefapiManifest(key: string, url: string) {
     const { body } = await got.get(url, { responseType: 'json' });
     if (body) {
       responseText = body;
+      console.log(`Defapi manifest for ${key} fetched from ${url}`);
+    } else {
+      console.warn(`Empty response for ${key} fetched from ${url}`);
     }
   } catch (e) {
     switch (e.code) {
@@ -34,7 +36,7 @@ async function fetchDefapiManifest(key: string, url: string) {
   if (responseText && responseText.length) {
     try {
       const manifestObj = JSON.parse(responseText);
-      const outputString = JSON.stringify(manifestObj, null, 2);
+      const outputString = JSON.stringify(manifestObj.data, null, 2);
       FS.ensureDirSync(MANIFESTS_DIR);
 
       const targetFile = Path.join(MANIFESTS_DIR, `${key}.json`);
@@ -46,16 +48,10 @@ async function fetchDefapiManifest(key: string, url: string) {
 }
 
 export async function captureSources() {
-  const sourcesDir = process.cwd();
-  const sourcesFile = Path.join(sourcesDir, 'defapi.sources.js');
-
-  if (require.resolve(sourcesFile)) {
-    const jsob = require(sourcesFile);
-    const entries = Object.entries(jsob);
-    for (let [key, url] of entries) {
-      if (url) {
-        await fetchDefapiManifest(key, url as string);
-      }
+  let sources = readSources();
+  for (let { name, manifestUrl } of sources) {
+    if (manifestUrl) {
+      await fetchDefapiManifest(name, manifestUrl as string);
     }
   }
 }

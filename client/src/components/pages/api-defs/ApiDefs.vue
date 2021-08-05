@@ -1,44 +1,43 @@
-<!--suppress HttpUrlsUsage -->
 <template>
   <div id='api-defs'>
-    <div class="container">
-      <div class="header" id="header">
-        <div class="left">
-          <SiteTitle v-bind:title="repo.title" />
+    <div class='page-container'>
+      <div class='header' id='apidefsHeader'>
+        <div class='left'>
+          <SiteTitle v-bind:title='repo.title' />
         </div>
-        <div class="middle">
+        <div class='middle'>
           <!-- Search -->
-          <div class="search-wrapper">
-            <div class="search-box">
-              <div class="search-box-contents">
-                <input id="input-search" class="search" type="text" @keyup="handleSearch" placeholder="Search..." />
-                <div class="clear" @click="clearSearch()">x</div>
+          <div class='search-wrapper'>
+            <div class='search-box'>
+              <div class='search-box-contents'>
+                <input id='input-search' class='search' type='text' @keyup='handleSearch' placeholder='Search...' />
+                <div class='clear' @click='clearSearch()'>x</div>
               </div>
             </div>
 
-            <div class="search-behaviour">
-              <div class="search-behaviour-input">
+            <div class='search-behaviour'>
+              <div class='search-behaviour-input'>
                 <input
-                  id="checkbox-search-behaviour"
-                  type="checkbox"
-                  @change="handleSearchBehaviourChange"
-                  v-bind:checked="searchBehaviourToggleOn"
+                  id='checkbox-search-behaviour'
+                  type='checkbox'
+                  @change='handleSearchBehaviourChange'
+                  v-bind:checked='searchBehaviourToggleOn'
                 />
-                <label for="checkbox-search-behaviour">Search title and description</label>
+                <label for='checkbox-search-behaviour'>Search title and description</label>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="right">
+        <div class='right'>
           <div
-            id="download-json--wrapper"
-            class="download-json--wrapper"
-            @click="downloadJson()"
-            title="Download full API json manifest"
+            id='download-json--wrapper'
+            class='download-json--wrapper'
+            @click='downloadJson()'
+            title='Download full API json manifest'
           >
-            <div class="download-json--text text">Download JSON</div>
-            <IconBase icon-color="#707070" class="icon icon-download">
+            <div class='download-json--text text'>Download JSON</div>
+            <IconBase icon-color='#707070' class='icon icon-download'>
               <!--578ed6-->
               <IconTrayArrowDown />
             </IconBase>
@@ -46,52 +45,55 @@
         </div>
       </div>
 
-      <div id="post-header">
-        <div id="sub-header">
-          <div class="highlights">
-            <div class="item highlight-item">
-              <div class="title">
+      <div id='post-header'>
+        <div id='sub-header'>
+          <div class='highlights'>
+            <div class='item highlight-item'>
+              <div class='title'>
                 <div>Base URI</div>
               </div>
-              <div class="value">
+              <div class='value'>
                 {{ baseUri }}
               </div>
             </div>
 
-            <div class="separator"></div>
+            <div class='separator'></div>
 
             <!-- Total Endpoints -->
-            <div class="item highlight-item">
-              <div class="title">
+            <div class='item highlight-item'>
+              <div class='title'>
                 <div>Total Endpoints</div>
               </div>
-              <div class="value">
+              <div class='value'>
                 {{ endpointsCount }}
               </div>
             </div>
 
-            <div class="separator" v-if="hasApiHeaders"></div>
-            <div class="item" v-if="hasApiHeaders">
-              <CodeBox title="Headers" v-bind:code="JSON.stringify(repo.headers, null, 2)" />
+            <div class='separator' v-if='hasApiHeaders'></div>
+            <div class='item' v-if='hasApiHeaders'>
+              <CodeBox title='Headers' v-bind:code='JSON.stringify(repo.headers, null, 2)' />
             </div>
 
-            <div class="separator" v-if="hasAuthHeaders"></div>
-            <div class="item" v-if="hasAuthHeaders">
-              <CodeBox title="Auth Headers" v-bind:code="JSON.stringify(repo.authenticationHeaders, null, 2)" />
+            <div class='separator' v-if='hasAuthHeaders'></div>
+            <div class='item' v-if='hasAuthHeaders'>
+              <CodeBox title='Auth Headers' v-bind:code='JSON.stringify(repo.authenticationHeaders, null, 2)' />
             </div>
           </div>
         </div>
-        <div class="endpoint-list-wrapper">
-          <div class="search-results-info">{{ numSearchResults }}</div>
-          <EndpointList v-bind:endpoints="endpointsToDisplay" />
+        <div class='endpoint-list-wrapper'>
+          <div class='search-results-info'>{{ numSearchResults }}</div>
+          <EndpointList v-bind:endpoints='endpointsToDisplay' />
         </div>
 
-        <div id="footer">
-          <div class="contents">
-            <a href="https://github.com/ikmich/defapi" target="_blank">
-              <img class="github-logo" src='/images/GitHub_Logo.png' alt="Github Logo"
-              /></a>
-          </div>
+        <!-- <div id='footer'>
+                  <div class='contents'>
+                    <a href='https://github.com/ikmich/defapi' target='_blank'>
+                      <img class='github-logo' src='/images/GitHub_Logo.png' alt='Github Logo'
+                      /></a>
+                  </div>
+                </div>-->
+        <div>
+          <PageFooter />
         </div>
       </div>
     </div>
@@ -99,19 +101,22 @@
 </template>
 
 <script>
-import SiteTitle from './components/SiteTitle';
-import EndpointList from './components/endpoints/EndpointList';
-import CodeBox from './components/CodeBox';
-import { sendEvent } from './helpers/send-event';
-import IconBase from './components/icons/IconBase';
-import IconTrayArrowDown from './components/icons/IconTrayArrowDown';
+import SiteTitle from '../../SiteTitle';
+import EndpointList from '../../endpoints/EndpointList';
+import CodeBox from '../../CodeBox';
+import { sendEvent } from '../../../helpers/send-event';
+import IconBase from '../../icons/IconBase';
+import IconTrayArrowDown from '../../icons/IconTrayArrowDown';
 
 import hljs from 'highlight.js';
 import 'highlight.js/styles/default.css';
+import PageFooter from '../../footer/PageFooter';
+import { getBaseUri } from '../../../utils';
 
 export default {
-  name: 'App',
+  name: 'ApiPage',
   components: {
+    PageFooter,
     IconTrayArrowDown,
     IconBase,
     SiteTitle,
@@ -123,7 +128,8 @@ export default {
       /** @type {ApiManifest | {}} */
       repo: {},
       search: '',
-      searchBehaviourToggleOn: false
+      searchBehaviourToggleOn: false,
+      apiName: this.$route.params.source
     };
   },
   computed: {
@@ -211,16 +217,12 @@ export default {
     },
 
     async fetchRepo() {
-      if (this.isDevEnvironment) {
-        console.log('> Development Environment - fetching sample data');
-        return require('../sample-repository');
-      }
-      let raw = await fetch('/repository.json');
+      let raw = await fetch(`${getBaseUri()}/api/manifests/${this.apiName}`);
       return JSON.parse(await raw.text());
     },
 
     handleHeaderOffset() {
-      const headerElem = document.getElementById('header');
+      const headerElem = document.getElementById('apidefsHeader');
       const headerHeight = headerElem.offsetHeight;
       const postHeaderElem = document.getElementById('post-header');
       postHeaderElem.style.position = 'relative';
@@ -240,12 +242,12 @@ export default {
       /** @type {HTMLElement} */
       const elIcon = parent.querySelector('.icon');
 
-      parent.onmouseover = function () {
+      parent.onmouseover = function() {
         elText.style.color = 'var(--pathBlue)';
         elIcon.classList.add('bordered');
       };
 
-      parent.onmouseout = function () {
+      parent.onmouseout = function() {
         elText.style.color = 'inherit';
         elIcon.classList.remove('bordered');
       };
@@ -268,6 +270,7 @@ export default {
   },
 
   mounted() {
+    // console.log('route params:', this.$route.params);
     hljs.highlightAll();
 
     sendEvent('app-mounted');
@@ -291,6 +294,6 @@ export default {
 };
 </script>
 
-<style>
-@import url('app.css');
+<style scoped>
+@import url('apidefs.css');
 </style>

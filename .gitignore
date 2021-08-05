@@ -7,3 +7,4 @@ build
 coverage
 .env
 .DS_Store
+client_dist.js
