@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "Server module for defapi client",
   "main": "dist/server.js",
-  "type": "module",
   "scripts": {
     "server:build:dev": "NODE_ENV=development npm run server:build",
     "server:build": "rm -rf ./dist && tsc",

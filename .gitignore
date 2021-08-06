@@ -8,3 +8,5 @@ coverage
 server/.env
 .DS_Store
 watch-client.js
+_deploy*.sh
+deploy*.sh
