@@ -5,7 +5,7 @@ lib
 dist
 build
 coverage
-server/.env
+.env
 .DS_Store
 watch-client.js
 _deploy*.sh

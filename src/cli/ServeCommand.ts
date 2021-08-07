@@ -2,6 +2,8 @@ import { ClyBaseCommand } from 'cliyargs';
 import { IOptions } from './index';
 import Path from 'path';
 import { spawn } from 'child_process';
+import { writeSourcesFile } from '../common';
+import { ApiManifest } from '../../index';
 
 const kill = require('kill-port');
 const getPort = require('get-port');
@@ -11,22 +13,47 @@ export class ServeCommand extends ClyBaseCommand<IOptions> {
   async run(): Promise<void> {
     await super.run();
 
-    const baseUri = String(this.options.baseUri ?? '');
+    let baseUri = String(this.options.baseUri ?? '');
     if (!baseUri) {
       throw new Error(
         '[defapi-client] --baseUri option missing. It is required to fetch the api manifest data to be rendered in the browser'
       );
     }
 
-    const { body } = await got.get(`${baseUri}/defapi/manifest`, { responseType: 'json' });
-    const manifest = body.data;
-    console.log({ manifest });
+    if (!baseUri.startsWith('http://') && !baseUri.startsWith('https://')) {
+      baseUri = `http://${baseUri}`;
+    }
+
+    try {
+      let manifestUrl = `${baseUri}/defapi/manifest`;
+      const { body } = await got.get(manifestUrl, { responseType: 'json' });
+      const bodyObject = JSON.parse(body);
+      const manifest = bodyObject.data as ApiManifest;
+      if (!manifest) {
+        console.warn('[defapi-client] No manifest. Is the baseUri correct?');
+        return;
+      }
+
+      const manifestTitle = manifest.title ? manifest.title : 'Defapi API';
+      let manifestName = manifestTitle.toLowerCase().replace(/\s+/gi, '_');
+
+      // Write defapi sources
+      writeSourcesFile([
+        {
+          name: manifestName,
+          label: manifest.title,
+          manifestUrl
+        }
+      ]);
+    } catch (e) {
+      console.error('[defapi-client] Error writing manifest', { e });
+    }
 
     const port = String(this.options.port ?? (await getPort()));
 
-    const server = Path.join(__dirname, '../../server/dist/server.js');
+    const serverFile = Path.join(__dirname, '../../dist/server/server.js');
 
-    let proc = spawn('node', [server, port, 'defapi-client-cli']);
+    let proc = spawn('node', [serverFile, port, 'defapi-client-cli']);
 
     proc.stdout.on('data', (data) => {
       if (data) {

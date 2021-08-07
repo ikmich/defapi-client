@@ -7,7 +7,7 @@ function getVersion() {
 }
 
 function getBaseUri() {
-  return process.env.VUE_APP_SERVER_BASE_URI ?? '';
+  return '';
 }
 
 export { isDev, getVersion, getBaseUri };

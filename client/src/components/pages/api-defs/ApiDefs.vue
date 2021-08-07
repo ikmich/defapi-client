@@ -103,7 +103,7 @@ import IconTrayArrowDown from '../../icons/IconTrayArrowDown';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/default.css';
 import PageFooter from '../../footer/PageFooter';
-// import { getBaseUri } from '../../../utils';
+import { getBaseUri, isDev } from '../../../utils';
 
 export default {
   name: 'ApiPage',
@@ -125,10 +125,6 @@ export default {
     };
   },
   computed: {
-    isDevEnvironment() {
-      return process.env.NODE_ENV === 'development';
-    },
-
     /** @type {EndpointDef[]} */
     endpointsToDisplay() {
       const searchInput = (this.search ?? '').trim();
@@ -209,8 +205,7 @@ export default {
     },
 
     async fetchRepo() {
-      let raw = await fetch(`/manifests/${this.apiName}`);
-      // let raw = await fetch(`${getBaseUri()}/api/manifests/${this.apiName}`);
+      let raw = await fetch(`${getBaseUri()}/api/manifests/${this.apiName}`);
       return JSON.parse(await raw.text());
     },
 
@@ -271,7 +266,7 @@ export default {
     this.fetchRepo()
       .then((results) => {
         this.repo = results;
-        if (this.isDevEnvironment) {
+        if (isDev()) {
           console.log('fetched repo::', results);
         }
         // Set site title

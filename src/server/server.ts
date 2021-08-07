@@ -2,7 +2,7 @@ import { env } from './env';
 import express from 'express';
 import cors from 'cors';
 import { applyRoutes } from './routes';
-import { CLIENT_DIR } from './common';
+import { CLIENT_DIR } from '../common';
 import { captureSources } from './capture-sources';
 
 const app = express();
@@ -29,11 +29,9 @@ const cliArgs = {
 let port = cliArgs.port ?? env.port;
 
 app.listen(port, () => {
-  if (cliArgs.id !== 'defapi-client-cli') {
-    captureSources().catch((err) => {
-      console.error(err);
-    });
-  }
+  captureSources().catch((err) => {
+    console.error(err);
+  });
 
   console.log(`defapi-client is being served on port ${port}`);
 });

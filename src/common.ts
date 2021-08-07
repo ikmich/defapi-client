@@ -1,9 +1,9 @@
-import { ApiManifest, DefapiSource, ManifestMap } from '../../index';
-import { FS, Path } from './deps';
+import { ApiManifest, DefapiSource, ManifestMap } from '../index';
+import { FS, Path } from './server/deps';
 
-export const CLIENT_DIR = Path.join(__dirname, '../../client/dist');
+export const CLIENT_DIR = Path.join(__dirname, '../client/dist');
 export const MANIFESTS_DIR = Path.join(CLIENT_DIR, 'manifests/');
-export const SOURCES_DIR = Path.join(__dirname, '../../');
+export const SOURCES_DIR = Path.join(__dirname, '../');
 export const SOURCES_FILE = Path.join(SOURCES_DIR, 'defapi.sources.js');
 
 export function readSources(): DefapiSource[] {
@@ -35,4 +35,26 @@ export function readManifests(): ManifestMap {
   }
   console.warn('Manifests not found');
   return results;
+}
+
+export function writeManifest(name: string, manifest: ApiManifest) {
+  FS.ensureDirSync(MANIFESTS_DIR);
+  const file = Path.join(MANIFESTS_DIR, `${name}.json`);
+  const output = JSON.stringify(manifest, null, 2);
+  FS.writeFileSync(file, output, { encoding: 'utf-8' });
+}
+
+export function writeSourcesFile(sources: DefapiSource[]) {
+  let sourcesString = '[';
+  for (let source of sources) {
+    sourcesString += JSON.stringify(source, null, 2) + ',';
+  }
+  sourcesString += ']';
+
+  const output = `/**
+ * @type {DefapiSource | DefapiSource[]}
+ */
+module.exports = ${sourcesString};`;
+
+  FS.writeFileSync(SOURCES_FILE, output, { encoding: 'utf-8' });
 }
