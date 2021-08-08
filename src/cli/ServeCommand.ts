@@ -27,9 +27,12 @@ export class ServeCommand extends ClyBaseCommand<IOptions> {
     let cliOptionBaseUri = String(this.options.baseUri || '');
 
     if (!configBaseUri && !cliOptionBaseUri) {
-      throw new Error(
-        '[defapi-client] --baseUri option missing. It is required to fetch the api manifest data to be rendered in the browser'
-      );
+      const msg = `[defapi-client.ERROR] Cannot find baseUri. Either:
+  * Provide a valid baseUri in your project's 'defapi-config.js' file. 
+    - OR -
+  * Pass a --baseUri option to the 'defapi-client' serve command`;
+      console.error(msg);
+      return;
     }
 
     let baseUri = configBaseUri ? configBaseUri : cliOptionBaseUri;
@@ -44,7 +47,7 @@ export class ServeCommand extends ClyBaseCommand<IOptions> {
       const bodyObject = JSON.parse(body);
       const manifest = bodyObject.data as ApiManifest;
       if (!manifest) {
-        console.warn('[defapi-client] No manifest. Is the baseUri correct?');
+        console.warn('[defapi-client.ERROR] No manifest. Is the baseUri correct?');
         return;
       }
 
@@ -61,13 +64,14 @@ export class ServeCommand extends ClyBaseCommand<IOptions> {
       ]);
     } catch (e) {
       console.error('[defapi-client] Error writing manifest', { e });
+      return;
     }
 
     const port = String(this.options.port ?? (await getPort()));
 
     const serverFile = Path.join(__dirname, '../../dist/server/index.js');
 
-    let proc = spawn('node', [serverFile, port, 'defapi-client-cli']);
+    let proc = spawn('node', [serverFile, `--port=${port}`, `--id=defapi-client-cli`]);
 
     proc.stdout.on('data', (data) => {
       if (data) {
