@@ -1,24 +1,23 @@
 {
   "name": "defapi-client",
-  "version": "1.0.0",
+  "version": "0.1.0-alpha",
   "description": "Client server for viewing defapi api definitions",
   "main": "dist/server/index.js",
   "scripts": {
-    "build": "rm -rf ./dist && tsc",
+    "build": "rimraf ./dist && tsc",
     "build:dev": "NODE_ENV=development npm run build",
     "all:build": "(cd client && yarn client:build) && npm run build",
     "server:start:dev": "ts-node-dev src/server/index.ts",
     "server:start": "ts-node ./dist/server/index.js",
     "server:start:prod": "pm2-runtime ./ecosystem.config.js --env production",
-    "server:stop:prod": "pm2 stop ./ecosystem.config.js"
+    "server:stop:prod": "pm2 stop ./ecosystem.config.js",
+    "prepublishOnly": "npm run all:build"
   },
   "files": [
     "dist",
-    "ecosystem.config.js",
     "LICENSE",
     "README.md",
-    "client/dist",
-    "client/README.md"
+    "client/dist"
   ],
   "author": "Ikenna Agbasimalo <michfx@gmail.com>",
   "license": "ISC",
@@ -41,6 +40,7 @@
     "got": "^9.6.0",
     "kill-port": "^1.6.1",
     "pm2": "^5.1.0",
+    "rimraf": "^3.0.2",
     "typescript": "^4.3.5",
     "yargs": "^17.1.0"
   },

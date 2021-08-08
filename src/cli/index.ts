@@ -3,7 +3,6 @@ import { cliyargs, IClyCommandInfo, IClyCommandOpts } from 'cliyargs';
 import { ServeCommand } from './ServeCommand';
 
 export interface IOptions extends IClyCommandOpts {
-  port?: number;
   baseUri?: string;
 }
 
