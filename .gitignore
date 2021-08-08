@@ -1,5 +1,4 @@
 node_modules
-lib
 .vscode
 .idea
 dist
@@ -7,6 +6,4 @@ build
 coverage
 .env
 .DS_Store
-watch-client.js
-_deploy*.sh
-deploy*.sh
+dev

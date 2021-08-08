@@ -1,5 +1,5 @@
 import { Express, Request, Response } from 'express';
-import { FS, Path } from './deps';
+import { FS, Path } from '../deps';
 import { CLIENT_DIR, MANIFESTS_DIR, readManifests, readSources } from '../common';
 import { DefapiSource, ManifestMap } from '../../index';
 

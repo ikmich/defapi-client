@@ -3,7 +3,7 @@ import { IOptions } from './index';
 import Path from 'path';
 import { spawn } from 'child_process';
 import { writeSourcesFile } from '../common';
-import { ApiManifest } from '../../index';
+import { ApiManifest, DefapiConfig } from '../../index';
 
 const kill = require('kill-port');
 const getPort = require('get-port');
@@ -13,12 +13,26 @@ export class ServeCommand extends ClyBaseCommand<IOptions> {
   async run(): Promise<void> {
     await super.run();
 
-    let baseUri = String(this.options.baseUri ?? '');
-    if (!baseUri) {
+    let configBaseUri = '';
+
+    // Ret base uri from defapi config file
+    const defapiConfigFile = Path.join(process.cwd(), 'defapi-config.js');
+    if (require.resolve(defapiConfigFile)) {
+      const config: DefapiConfig = require(defapiConfigFile);
+      if (config && config.api && config.api.baseUri) {
+        configBaseUri = typeof config.api.baseUri == 'string' ? config.api.baseUri : config.api.baseUri();
+      }
+    }
+
+    let cliOptionBaseUri = String(this.options.baseUri || '');
+
+    if (!configBaseUri && !cliOptionBaseUri) {
       throw new Error(
         '[defapi-client] --baseUri option missing. It is required to fetch the api manifest data to be rendered in the browser'
       );
     }
+
+    let baseUri = configBaseUri ? configBaseUri : cliOptionBaseUri;
 
     if (!baseUri.startsWith('http://') && !baseUri.startsWith('https://')) {
       baseUri = `http://${baseUri}`;
@@ -51,7 +65,7 @@ export class ServeCommand extends ClyBaseCommand<IOptions> {
 
     const port = String(this.options.port ?? (await getPort()));
 
-    const serverFile = Path.join(__dirname, '../../dist/server/server.js');
+    const serverFile = Path.join(__dirname, '../../dist/server/index.js');
 
     let proc = spawn('node', [serverFile, port, 'defapi-client-cli']);
 

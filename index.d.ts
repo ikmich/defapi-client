@@ -14,9 +14,10 @@ export declare type DashboardSourceItem = {
 };
 
 export declare type DashboardData = {
-  sources: DashboardSourceItem[]
-}
-// ====
+  sources: DashboardSourceItem[];
+};
+
+// ************************************************
 
 export interface EndpointDef {
   path: string;
@@ -62,7 +63,7 @@ export type ResponseDef = {
 
 export interface DefapiConfig {
   api: {
-    baseUri?: string;
+    baseUri?: string | (() => string);
     title?: string;
     headers?: Objectx;
     authenticationHeaders?: Objectx;
@@ -70,9 +71,6 @@ export interface DefapiConfig {
   };
   project: {
     srcPath?: string;
-  };
-  defapi: {
-    routePrefix?: string;
   };
 }
 

@@ -1,9 +1,9 @@
-import { env } from './env';
+import { env } from '../env';
 import express from 'express';
 import cors from 'cors';
 import { applyRoutes } from './routes';
 import { CLIENT_DIR } from '../common';
-import { captureSources } from './capture-sources';
+import { captureSources } from '../capture-sources';
 
 const app = express();
 app.use(cors());
@@ -33,5 +33,5 @@ app.listen(port, () => {
     console.error(err);
   });
 
-  console.log(`defapi-client is being served on port ${port}`);
+  console.log(`defapi-client is being served at http://localhost:${port}`);
 });

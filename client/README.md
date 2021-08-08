@@ -1,3 +1,3 @@
 # defapi-client
 
-HTML client viewer for defapi API definition library.
+Vue html client for defapi API definitions library.

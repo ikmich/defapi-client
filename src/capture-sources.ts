@@ -1,5 +1,5 @@
 import { FS, Path } from './deps';
-import { MANIFESTS_DIR, readSources } from '../common';
+import { MANIFESTS_DIR, readSources } from './common';
 const got = require('got');
 
 async function fetchDefapiManifest(key: string, url: string) {
