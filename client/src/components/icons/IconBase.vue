@@ -1,14 +1,14 @@
 <template>
   <svg
-    xmlns="http://www.w3.org/2000/svg"
-    version="1.1"
-    :width="width"
-    :height="height"
-    :viewBox="viewBoxValue"
-    style="display: inline"
+    xmlns='http://www.w3.org/2000/svg'
+    version='1.1'
+    :width='width'
+    :height='height'
+    :viewBox='viewBoxValue'
+    style='display: inline'
   >
-    <title :id="iconName" lang="en">{{ iconName }}</title>
-    <g :fill="iconColor">
+    <title :id='iconName' lang='en'>{{ iconName }}</title>
+    <g :fill='iconColor'>
       <slot />
     </g>
   </svg>
@@ -34,12 +34,8 @@ export default {
       return `${this.left} ${this.top} ${this.right} ${this.bottom}`;
     }
   },
-  // watch: {
-  //   src() {
-  //
-  //   }
-  // },
-  async mounted() {}
+  async mounted() {
+  }
 };
 </script>
 

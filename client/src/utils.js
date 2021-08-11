@@ -7,7 +7,7 @@ function getVersion() {
 }
 
 function getBaseUri() {
-  return '';
+  return isDev() ? 'http://0.0.0.0:7500' : '';
 }
 
 export { isDev, getVersion, getBaseUri };

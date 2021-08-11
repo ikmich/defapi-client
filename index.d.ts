@@ -1,7 +1,7 @@
 export declare type DefapiSource = {
   name: string;
   label: string;
-  manifestUrl: string;
+  baseUri: string;
 };
 
 export declare type ManifestMap = {

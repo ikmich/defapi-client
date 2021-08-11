@@ -54,31 +54,31 @@
   padding: 12px;
 }
 
-.download-json--wrapper {
+.header-action-link--wrapper {
   display: flex;
   align-items: center;
   margin-right: 12px;
 }
 
-.download-json--wrapper * {
+.header-action-link--wrapper * {
   cursor: pointer;
 }
 
 .download-json--text {
   color: #606060;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 500;
   margin-right: 6px;
 }
 
-.icon-download {
+.header-action-link--wrapper .icon {
   background-color: #e9e9e9;
   border-radius: 300px;
   border: 1px solid transparent;
-  padding: 7px;
+  padding: 5px;
 }
 
-.icon-download.bordered {
+.header-action-link--wrapper .icon.bordered {
   border: 1px solid #b0b0b0;
 }
 

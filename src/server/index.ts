@@ -4,7 +4,7 @@ import cors from 'cors';
 import { applyRoutes } from './routes';
 import { CLIENT_DIR } from '../common';
 import { captureSources } from '../capture-sources';
-import yargs from 'yargs';
+import { cliyargs } from 'cliyargs';
 
 const app = express();
 app.use(cors());
@@ -22,7 +22,7 @@ app.use(
 
 applyRoutes(app);
 
-const argv: any = yargs.argv;
+const argv: any = cliyargs.yargs.argv;
 
 // @ts-ignore
 let port = argv.port || env.port;

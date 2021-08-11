@@ -1,35 +1,41 @@
-import { FS, Path } from './deps';
-import { MANIFESTS_DIR, readSources } from './common';
+import { conprint, FS, Path } from './deps';
+import { MANIFEST_ROUTE_PATH_STUB, MANIFESTS_DIR, readSources } from './common';
+
 const got = require('got');
 
-async function fetchDefapiManifest(key: string, url: string) {
+async function fetchDefapiManifest(key: string, baseUrl: string) {
   let responseText: string | null = null;
+  let manifestUrl = `${baseUrl}${MANIFEST_ROUTE_PATH_STUB}`;
   try {
-    const { body } = await got.get(url, { responseType: 'json' });
+    const { body } = await got.get(manifestUrl, { responseType: 'json' });
     if (body) {
       responseText = body;
-      console.log(`Defapi manifest for ${key} fetched from ${url}`);
+      conprint.info(`Defapi manifest for ${key} fetched`);
     } else {
-      console.warn(`Empty response for ${key} fetched from ${url}`);
+      conprint.notice(`Empty response for ${key} fetched from ${manifestUrl}`);
     }
   } catch (e) {
     switch (e.code) {
       case 'ECONNREFUSED':
-        return console.error('[Error fetching manifest] Connection refused', {
+        conprint.error('[Error fetching manifest] Connection refused', {
           key,
-          url,
+          url: manifestUrl,
           code: e.code,
           message: e.message
         });
+
+        return;
       case 'ECONNRESET':
-        return console.error('[Error fetching manifest] Connection reset', {
+        conprint.error('[Error fetching manifest] Connection reset', {
           key,
-          url,
+          url: manifestUrl,
           code: e.code,
           message: e.message
         });
+
+        return;
       default:
-        console.error('[Error fetching manifest]', { key, url, e });
+        conprint.error('[Error fetching manifest]', { key, url: manifestUrl, e });
     }
   }
 
@@ -42,16 +48,16 @@ async function fetchDefapiManifest(key: string, url: string) {
       const targetFile = Path.join(MANIFESTS_DIR, `${key}.json`);
       FS.writeFileSync(targetFile, outputString, { encoding: 'utf-8' });
     } catch (e) {
-      console.error('Error writing manifest', { key, url, e });
+      conprint.error('Error writing manifest', { key, url: manifestUrl, e });
     }
   }
 }
 
 export async function captureSources() {
   let sources = readSources();
-  for (let { name, manifestUrl } of sources) {
-    if (manifestUrl) {
-      await fetchDefapiManifest(name, manifestUrl as string);
+  for (let { name, baseUri } of sources) {
+    if (baseUri) {
+      await fetchDefapiManifest(name, baseUri as string);
     }
   }
 }

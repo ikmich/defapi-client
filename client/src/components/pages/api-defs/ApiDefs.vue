@@ -32,7 +32,7 @@
         <div class='right'>
           <div
             id='download-json--wrapper'
-            class='download-json--wrapper'
+            class='header-action-link--wrapper'
             @click='downloadJson()'
             title='Download full API json manifest'
           >
@@ -40,6 +40,21 @@
             <IconBase icon-color='#707070' class='icon icon-download'>
               <!--578ed6-->
               <IconTrayArrowDown />
+            </IconBase>
+          </div>
+
+          <div style='width: 6px'></div>
+
+          <div
+            id='link--refresh-manifest'
+            class='header-action-link--wrapper'
+            @click='refreshManifest()'
+            title='Refresh the API manifest to get updated data'
+          >
+            <div class='download-json--text text'>Refresh</div>
+            <IconBase icon-color='#707070' class='icon icon-download'>
+              <!--578ed6-->
+              <RefreshIcon />
             </IconBase>
           </div>
         </div>
@@ -104,10 +119,12 @@ import hljs from 'highlight.js';
 import 'highlight.js/styles/default.css';
 import PageFooter from '../../footer/PageFooter';
 import { getBaseUri, isDev } from '../../../utils';
+import RefreshIcon from '../../icons/RefreshIcon';
 
 export default {
   name: 'ApiPage',
   components: {
+    RefreshIcon,
     PageFooter,
     IconTrayArrowDown,
     IconBase,
@@ -209,6 +226,16 @@ export default {
       return JSON.parse(await raw.text());
     },
 
+    async refreshManifest() {
+      let raw = await fetch(`${getBaseUri()}/api/manifests/${this.apiName}/refresh`, {
+        method: 'POST'
+      });
+      const payload = JSON.parse(await raw.text());
+      if (payload) {
+        this.repo = payload;
+      }
+    },
+
     handleHeaderOffset() {
       const headerElem = document.getElementById('apidefsHeader');
       const headerHeight = headerElem.offsetHeight;
@@ -218,27 +245,27 @@ export default {
     },
 
     /**
-     * Handles hover visual behaviour for the main download button/link.
+     * Handles hover visual behaviour for the header nav action buttons/links.
      */
-    handleDownloadHover() {
-      /** @type {HTMLElement} */
-      const parent = document.getElementById('download-json--wrapper');
+    handleHeaderNavActionsHover() {
+      const parentEls = document.getElementsByClassName('header-action-link--wrapper');
+      for (let /** @type {HTMLElement} */ parent of parentEls) {
+        /** @type {HTMLElement} */
+        const elText = parent.querySelector('.text');
 
-      /** @type {HTMLElement} */
-      const elText = parent.querySelector('.text');
+        /** @type {HTMLElement} */
+        const elIcon = parent.querySelector('.icon');
 
-      /** @type {HTMLElement} */
-      const elIcon = parent.querySelector('.icon');
+        parent.onmouseover = function() {
+          elText.style.color = 'var(--pathBlue)';
+          elIcon.classList.add('bordered');
+        };
 
-      parent.onmouseover = function() {
-        elText.style.color = 'var(--pathBlue)';
-        elIcon.classList.add('bordered');
-      };
-
-      parent.onmouseout = function() {
-        elText.style.color = 'inherit';
-        elIcon.classList.remove('bordered');
-      };
+        parent.onmouseout = function() {
+          elText.style.color = 'inherit';
+          elIcon.classList.remove('bordered');
+        };
+      }
     },
 
     downloadJson() {
@@ -258,7 +285,6 @@ export default {
   },
 
   mounted() {
-    // console.log('route params:', this.$route.params);
     hljs.highlightAll();
 
     sendEvent('app-mounted');
@@ -277,7 +303,7 @@ export default {
       });
 
     this.handleHeaderOffset();
-    this.handleDownloadHover();
+    this.handleHeaderNavActionsHover();
   }
 };
 </script>

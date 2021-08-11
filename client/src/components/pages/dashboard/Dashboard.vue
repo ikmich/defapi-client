@@ -12,8 +12,8 @@
     </div>
     <div id='dashboardContent'>
       <div class='cards-deck'>
-        <div v-for='item in dashboardData.sources' v-bind:key='item.source.name'>
-          <router-link :to="{ name: 'apidefs', params: { source: item.source.name } }" class='card-link'>
+        <div v-for='item in dashboardData.sources' v-bind:key='itemUtil.getSourceName(item)'>
+          <router-link :to="{ name: 'apidefs', params: { source: itemUtil.getSourceName(item) } }" class='card-link'>
             <div class='source-card'>
               <div class='box--apiIcon-meta'>
                 <IconBase icon-color='#578ed6' width='36' height='36'>
@@ -21,12 +21,12 @@
                 </IconBase>
                 <div class='vSep'></div>
                 <div class='text--endpointsLength'>
-                  <div>{{ item.manifest.endpoints.length }}</div>
+                  <div>{{ itemUtil.getEndpointsLength(item) }}</div>
                   <div>Endpoints</div>
                 </div>
               </div>
-              <div class='title'>{{ item.source.label }}</div>
-              <div class='text--baseUri'>{{ item.manifest.baseUri }}</div>
+              <div class='title'>{{ itemUtil.getSourceLabel(item) }}</div>
+              <div class='text--baseUri'>{{ itemUtil.getManifestBaseUri(item) }}</div>
             </div>
           </router-link>
         </div>
@@ -59,19 +59,60 @@ export default {
       clientVersion: getVersion()
     };
   },
-  computed: {},
-  methods: {
-    async fetchSources() {
-      try {
-        const raw = await fetch(`${getBaseUri()}/api/sources`);
-        this.sources = JSON.parse(await raw.text());
-
-        if (isDev()) {
-          console.log('sources', this.sources);
+  computed: {
+    itemUtil() {
+      return {
+        /**
+         * @param item {DashboardSourceItem}
+         */
+        getEndpointsLength(item) {
+          if (item) {
+            return item.manifest?.endpoints?.length;
+          }
+          return -1;
+        },
+        /**
+         * @param item {DashboardSourceItem}
+         */
+        getSourceName(item) {
+          if (item) {
+            return item.source.name;
+          }
+          return '';
+        },
+        /**
+         * @param item {DashboardSourceItem}
+         */
+        getSourceLabel(item) {
+          if (item) {
+            return item.source.label;
+          }
+          return '';
+        },
+        /**
+         * @param item {DashboardSourceItem}
+         */
+        getManifestBaseUri(item) {
+          if (item) {
+            return item.manifest.baseUri;
+          }
+          return '';
         }
-      } catch (e) {
-        console.error('Error fetching sources:', e);
+      };
+    }
+  },
+  methods: {
+    /**
+     *
+     * @param item {DashboardSourceItem}
+     * @return {string[]|number}
+     */
+    getSourceItemEndpointsLength(item) {
+      if (!item) {
+        return -1;
       }
+
+      return item.manifest?.endpoints?.length;
     },
     async fetchDashboardData() {
       try {
@@ -88,7 +129,6 @@ export default {
   },
   async mounted() {
     await this.fetchDashboardData();
-    await this.fetchSources();
   }
 };
 </script>
